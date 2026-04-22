@@ -1,0 +1,19 @@
+# Flask Web Framework
+Flask==3.0.0
+Werkzeug==3.0.1
+
+# Machine Learning
+scikit-learn==1.8.0
+numpy==2.4.4
+scipy==1.17.1
+
+# Data Processing
+pandas==3.0.2
+python-dateutil==2.9.0.post0
+
+# Production Server
+gunicorn==22.0.0
+
+# Utilities
+joblib==1.5.3
+threadpoolctl==3.6.0

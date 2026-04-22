@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake News Detection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-clear {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-clear:hover {
+            background: #e0e0e0;
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: center;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .result.real {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        
+        .result.fake {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .result-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .result-confidence {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+        
+        .error {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            border-radius: 6px;
+            color: #721c24;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .error.show {
+            display: block;
+        }
+        
+        .info {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Fake News Detector</h1>
+        
+        <form id="predictionForm" method="POST">
+            <div class="form-group">
+                <label for="news">Enter news text to check:</label>
+                <textarea 
+                    id="news" 
+                    name="news" 
+                    placeholder="Paste the news article here..."
+                    required
+                >{{ news_text }}</textarea>
+            </div>
+            
+            <div class="btn-group">
+                <button type="submit" class="btn-submit">Check News</button>
+                <button type="reset" class="btn-clear">Clear</button>
+            </div>
+        </form>
+        
+        {% if error %}
+        <div class="error show">
+            <strong>⚠️ Error:</strong> {{ error }}
+        </div>
+        {% endif %}
+        
+        {% if prediction %}
+        <div class="result show {% if prediction == 'Real News' %}real{% else %}fake{% endif %}">
+            <div class="result-title">{{ prediction }}</div>
+            <div class="result-confidence">Confidence: {{ confidence }}</div>
+        </div>
+        {% endif %}
+        
+        <div class="info">
+            Model accuracy: 98.53% | Using TF-IDF + Logistic Regression
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('predictionForm');
+        
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const newsText = formData.get('news').trim();
+            
+            if (!newsText) {
+                alert('Please enter some text');
+                return;
+            }
+            
+            // Submit form normally (server-side rendering)
+            this.submit();
+        });
+    </script>
+</body>
+</html>

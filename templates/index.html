@@ -222,18 +222,17 @@
         const form = document.getElementById('predictionForm');
         
         form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
             const formData = new FormData(this);
             const newsText = formData.get('news').trim();
             
             if (!newsText) {
+                e.preventDefault();
                 alert('Please enter some text');
-                return;
+                return false;
             }
             
-            // Submit form normally (server-side rendering)
-            this.submit();
+            // Allow form to submit normally with POST
+            return true;
         });
     </script>
 </body>
